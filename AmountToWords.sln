@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmountToWords.Lib", "Amount
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmountToWords.Tests", "AmountToWords.Tests\AmountToWords.Tests.csproj", "{EBA6F843-AECB-4E15-94BA-D9DDE2D52FB1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmountToWords.App", "AmountToWords.App\AmountToWords.App.csproj", "{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{EBA6F843-AECB-4E15-94BA-D9DDE2D52FB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBA6F843-AECB-4E15-94BA-D9DDE2D52FB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBA6F843-AECB-4E15-94BA-D9DDE2D52FB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{12F9E252-3ABA-4DAF-83FF-AE23E3A19FD5} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D0E7CE27-B43A-4195-87DB-521CC9D2D725} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{EBA6F843-AECB-4E15-94BA-D9DDE2D52FB1} = {E34A58DB-A52A-4390-BAED-36B1C5476250}
+		{B55216B6-6942-ECF5-F7DF-CAD53E1C2A09} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {926ADEC1-A97C-4AC1-A0CE-26222E385081}
