@@ -1,7 +1,12 @@
+using AmountToWords.Lib.Mapping;
+using AmountToWords.Lib.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<NumberMaps>();
+builder.Services.AddScoped<IAmountToWordsConverter, AmountToWordsConverter>();
 
 var app = builder.Build();
 

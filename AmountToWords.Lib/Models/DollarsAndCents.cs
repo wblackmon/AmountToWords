@@ -9,11 +9,11 @@ public class DollarsAndCents
     public string Fraction => $"{Cents:D2}/100";
 
     private List<int>? _threeDigitGroups;
-    private readonly AmountToWordsConverter _converter;
+    private readonly IAmountToWordsConverter _converter;
 
-    public DollarsAndCents(decimal amount)
+    public DollarsAndCents(decimal amount, IAmountToWordsConverter converter)
     {
-        _converter = new AmountToWordsConverter();
+        _converter = converter;
         Dollars = (long)Math.Floor(amount);
         Cents = (int)((amount - Dollars) * 100);
     }
@@ -28,12 +28,7 @@ public class DollarsAndCents
     public override string ToString()
     {
         string words = _converter.GetMagnitudeWords(GetGroups());
-        return string.IsNullOrWhiteSpace(words) ? "zero" : words;
-    }
-
-    public string ToFullAmountString()
-    {
-        string core = ToString();
+        string core = string.IsNullOrWhiteSpace(words) ? "zero" : words;
         return CapitalizeFirst($"{core} and {Fraction} dollars");
     }
 

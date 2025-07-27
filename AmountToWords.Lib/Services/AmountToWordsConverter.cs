@@ -11,10 +11,6 @@ namespace AmountToWords.Lib.Services
             _numberMaps = numberMaps;
         }
 
-        public AmountToWordsConverter()
-        {
-        }
-
         public List<int> GetThreeDigitGroups(long number)
         {
             var groups = new List<int>();
