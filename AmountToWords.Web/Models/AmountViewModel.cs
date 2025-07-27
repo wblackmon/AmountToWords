@@ -5,7 +5,10 @@ namespace AmountToWords.Web.Models
     public class AmountViewModel
     {
         [Required(ErrorMessage = "Please enter an amount")]
-        public decimal? Amount { get; set; } = null;
-        public  string? AmountWords { get; set; }
+        [Range(typeof(decimal), "0.01", "9999999999.99", ErrorMessage = "Amount must be greater than zero")]
+        public decimal Amount { get; set; }
+
+        public string? AmountWords { get; set; }
+
     }
 }

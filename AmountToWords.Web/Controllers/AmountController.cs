@@ -17,9 +17,9 @@ namespace AmountToWords.Web.Controllers
         [HttpPost]
         public IActionResult Convert(AmountViewModel model)
         {
-            if (ModelState.IsValid && model.Amount.HasValue)
+            if (ModelState.IsValid)
             {
-                var dollarsAndCents = new DollarsAndCents(model.Amount.Value, _converter);
+                var dollarsAndCents = new DollarsAndCents(model.Amount, _converter);
                 // Use dollarsAndCents to set AmountWords or other logic as needed
                 model.AmountWords = dollarsAndCents.ToString();
             }
