@@ -4,7 +4,7 @@ public class DollarsAndCents
     public int Cents { get; }
     public string Fraction => $"{Cents:D2}/100";
 
-    private List<int>? _cachedGroups;
+    private List<int>? _threeDigitGroups;
 
     public DollarsAndCents(decimal amount)
     {
@@ -14,9 +14,9 @@ public class DollarsAndCents
 
     public List<int> GetGroups()
     {
-        if (_cachedGroups == null)
-            _cachedGroups = AmountToWordsConverter.GetThreeDigitGroups(Dollars);
-        return _cachedGroups;
+        if (_threeDigitGroups == null)
+            _threeDigitGroups = AmountToWordsConverter.GetThreeDigitGroups(Dollars);
+        return _threeDigitGroups;
     }
 
     public override string ToString()
