@@ -9,7 +9,7 @@ namespace AmountToWords.Tests;
 [TestClass]
 public class AmountControllerTests
 {
-    private Mock<IAmountToWordsConverter> _mockConverter;
+    private Mock<IAmountToWordsConverter>? _mockConverter;
 
     [TestInitialize]
     public void Setup()
@@ -18,22 +18,26 @@ public class AmountControllerTests
     }
 
     [TestMethod]
-    public void Convert_ValidModel_SetAmountWords_ReturnView()
+    public void Convert_ValidModel_SetsAmountWords_ReturnsIndexView()
     {
         // Arrange
         decimal input = 2523.04m;
         var expectedWords = "Two thousand five hundred twenty-three and 04/100 dollars";
 
-        _mockConverter
-            .Setup(c => c.GetThreeDigitGroups(2523))
-            .Returns(new List<int> { 532, 2 });
+        var mockConverter = new Mock<IAmountToWordsConverter>();
 
-        _mockConverter
+        // Simulate the conversion steps
+        mockConverter
+            .Setup(c => c.GetThreeDigitGroups(2523))
+            .Returns(new List<int> { 523, 2 });
+
+        mockConverter
             .Setup(c => c.GetMagnitudeWords(It.IsAny<List<int>>()))
             .Returns("two thousand five hundred twenty-three");
 
-        var controller = new AmountController(input, _mockConverter.Object);
+        var controller = new AmountController(mockConverter.Object);
         var model = new AmountViewModel { Amount = input };
+
         controller.ModelState.Clear(); // Valid model state
 
         // Act

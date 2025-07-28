@@ -9,7 +9,7 @@ public class AmountController : Controller
 {
     private readonly IAmountToWordsConverter _converter;
 
-    public AmountController(decimal input, IAmountToWordsConverter converter)
+    public AmountController(IAmountToWordsConverter converter)
     {
         _converter = converter;
     }
@@ -20,7 +20,6 @@ public class AmountController : Controller
         if (ModelState.IsValid)
         {
             var dollarsAndCents = new DollarsAndCents(model.Amount, _converter);
-            // Use dollarsAndCents to set AmountWords or other logic as needed
             model.AmountWords = dollarsAndCents.ToString();
         }
 
@@ -33,4 +32,3 @@ public class AmountController : Controller
         return View(new AmountViewModel());
     }
 }
-
