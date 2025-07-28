@@ -3,34 +3,34 @@ using AmountToWords.Lib.Services;
 using AmountToWords.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AmountToWords.Web.Controllers
+namespace AmountToWords.Web.Controllers;
+
+public class AmountController : Controller
 {
-    public class AmountController : Controller
+    private readonly IAmountToWordsConverter _converter;
+
+    public AmountController(decimal input, IAmountToWordsConverter converter)
     {
-        private readonly IAmountToWordsConverter _converter;
+        _converter = converter;
+    }
 
-        public AmountController(IAmountToWordsConverter converter)
+    [HttpPost]
+    public IActionResult Convert(AmountViewModel model)
+    {
+        if (ModelState.IsValid)
         {
-            _converter = converter;   
+            var dollarsAndCents = new DollarsAndCents(model.Amount, _converter);
+            // Use dollarsAndCents to set AmountWords or other logic as needed
+            model.AmountWords = dollarsAndCents.ToString();
         }
 
-        [HttpPost]
-        public IActionResult Convert(AmountViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var dollarsAndCents = new DollarsAndCents(model.Amount, _converter);
-                // Use dollarsAndCents to set AmountWords or other logic as needed
-                model.AmountWords = dollarsAndCents.ToString();
-            }
+        return View("Index", model);
+    }
 
-            return View("Index", model);
-        }
-
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View(new AmountViewModel());
-        }
+    [HttpGet]
+    public IActionResult Index()
+    {
+        return View(new AmountViewModel());
     }
 }
+
