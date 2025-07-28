@@ -89,7 +89,6 @@ public class AmountToWordsConverterTests
 
         // Act
         var result = _converter.GetMagnitudeWords(groups);
-        Debug.WriteLine(result);
 
         // Assert
         Assert.AreEqual("six thousand seven", result);
