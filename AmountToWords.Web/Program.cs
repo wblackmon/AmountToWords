@@ -1,32 +1,35 @@
-using AmountToWords.Lib.Mapping;
+﻿using AmountToWords.Lib.Mapping;
 using AmountToWords.Lib.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<NumberMaps>();
-builder.Services.AddScoped<IAmountToWordsConverter, AmountToWordsConverter>();
+// 🔧 Register services with DI container
+builder.Services.AddControllersWithViews();                     // MVC + Razor views
+builder.Services.AddSingleton<NumberMaps>();                    // Static word mappings (safe as singleton)
+builder.Services.AddScoped<IAmountToWordsConverter, AmountToWordsConverter>(); // Scoped per request, clean for web
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// 🌐 Configure middleware pipeline
 if (!app.Environment.IsDevelopment())
 {
+    // User-friendly error page for production
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+
+    // Enforce HTTPS with HSTS in production (defaults to 30-day cache)
+    app.UseHsts(); // Consider tuning this for tighter security in long-lived APIs
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+app.UseHttpsRedirection();   // Redirect HTTP → HTTPS (a must-have)
+app.UseStaticFiles();        // Serve CSS, JS, images, etc.
 
-app.UseRouting();
+app.UseRouting();            // Enables endpoint routing (controllers, actions)
 
-app.UseAuthorization();
+app.UseAuthorization();      // Placeholder for auth setup, if needed later
 
+// 📦 Default route mapping (MVC controller pattern)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+app.Run(); // 🚀 Kick off the application

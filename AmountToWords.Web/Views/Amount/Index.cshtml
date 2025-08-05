@@ -40,3 +40,22 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+@* This Razor view is part of an ASP.NET Core MVC application designed to convert a decimal amount into its 
+    textual representation (e.g., $123.45 → "One hundred twenty-three dollars and forty-five cents"). 
+    It binds to the AmountViewModel, which contains both the numeric input (Amount) and the resulting output (AmountWords).
+
+💡 Key Functional Elements:
+
+Form Layout: A Bootstrap-styled form is presented for user input, with validation handled via unobtrusive JavaScript
+(_ValidationScriptsPartial) and server-side validation using asp-validation-summary and asp-validation-for.
+
+- User Input: A decimal field labeled "Decimal Amount" allows the user to enter a numeric value.
+
+- Conversion Output: Once submitted, the view displays the word-converted amount in a read-only div styled to indicate output clarity.
+
+- Controller Action: The form posts to the Convert action in the corresponding controller to process the conversion.
+
+- Navigation: A simple anchor link provides navigation back to the home page for user flow continuity.
+
+This view demonstrates thoughtful UX considerations, including validation summaries, semantic labeling,
+and responsive design elements using Bootstrap classes. *@

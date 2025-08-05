@@ -4,24 +4,28 @@ namespace AmountToWords.Lib.Services
 {
     public class AmountToWordsConverter : IAmountToWordsConverter
     {
+        // Holds numeric word mappings (ones, tens, magnitudes, etc.)
         private readonly NumberMaps _numberMaps;
 
+        // Inject maps dependency—keeps things flexible and testable
         public AmountToWordsConverter(NumberMaps numberMaps)
         {
             _numberMaps = numberMaps;
         }
 
+        // Break the number into 3-digit groups (for thousands, millions, etc.)
         public List<int> GetThreeDigitGroups(long number)
         {
             var groups = new List<int>();
             while (number > 0)
             {
-                groups.Add((int)(number % 1000));
+                groups.Add((int)(number % 1000)); // isolate next 3 digits
                 number /= 1000;
             }
             return groups;
         }
 
+        // Convert a single 3-digit chunk into word form
         public string ConvertThreeDigitGroupToWords(int number)
         {
             if (number == 0) return "";
@@ -31,11 +35,13 @@ namespace AmountToWords.Lib.Services
 
             var parts = new List<string>();
 
+            // "X hundred"
             if (hundred > 0)
                 parts.Add($"{_numberMaps.Ones[hundred]} hundred");
 
             if (remainder > 0)
             {
+                // Handle 1–19 directly
                 if (remainder < 20)
                 {
                     parts.Add(_numberMaps.Ones[remainder]);
@@ -44,7 +50,12 @@ namespace AmountToWords.Lib.Services
                 {
                     int ten = remainder / 10;
                     int digits = remainder % 10;
-                    string twoDigits = digits == 0 ? _numberMaps.Tens[ten] : $"{_numberMaps.Tens[ten]}-{_numberMaps.Ones[digits]}";
+
+                    // Handle cases like "twenty" vs. "twenty-three"
+                    string twoDigits = digits == 0
+                        ? _numberMaps.Tens[ten]
+                        : $"{_numberMaps.Tens[ten]}-{_numberMaps.Ones[digits]}";
+
                     parts.Add(twoDigits);
                 }
             }
@@ -52,6 +63,7 @@ namespace AmountToWords.Lib.Services
             return string.Join(" ", parts);
         }
 
+        // Stitch together full magnitude phrase (e.g. "Three Million Two Hundred...")
         public string GetMagnitudeWords(List<int> groups)
         {
             var parts = new List<string>();
@@ -63,7 +75,10 @@ namespace AmountToWords.Lib.Services
                 string words = ConvertThreeDigitGroupToWords(value);
                 string magnitude = _numberMaps.Magnitudes[i];
 
-                parts.Insert(0, string.IsNullOrWhiteSpace(magnitude) ? words : $"{words} {magnitude}");
+                // Prepend highest magnitude first
+                parts.Insert(0, string.IsNullOrWhiteSpace(magnitude)
+                    ? words
+                    : $"{words} {magnitude}");
             }
 
             return string.Join(" ", parts).Trim();
