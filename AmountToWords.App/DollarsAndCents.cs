@@ -1,5 +1,8 @@
+using System;
+
 public class DollarsAndCents
 {
+    public static bool IsNegative { get; set; }
     public long Dollars { get; }
     public int Cents { get; }
     public string Fraction => $"{Cents:D2}/100";
@@ -8,6 +11,9 @@ public class DollarsAndCents
 
     public DollarsAndCents(decimal amount)
     {
+        amount = Math.Round(amount, 2, MidpointRounding.AwayFromZero);
+        IsNegative = amount < 0;
+        amount = Math.Abs(amount);
         Dollars = (long)Math.Floor(amount);
         Cents = (int)((amount - Dollars) * 100);
     }
@@ -21,8 +27,18 @@ public class DollarsAndCents
 
     public override string ToString()
     {
-        string words = AmountToWordsConverter.GetMagnitudeWords(GetGroups());
-        return string.IsNullOrWhiteSpace(words) ? "zero" : words;
+        var words = AmountToWordsConverter.GetMagnitudeWords(GetGroups());
+
+        // Fall back to "zero" if no words were generated
+        var core = string.IsNullOrWhiteSpace(words) ? "zero" : words;
+
+        // Return full output with initial cap and fractional cents
+        var result = $"{core} and {Fraction} dollars";
+        if (!IsNegative)
+        {
+            result = CapitalizeFirst(result);
+        }
+        return IsNegative ? $"Negative {result}" : result;
     }
 
     public string ToFullAmountString()

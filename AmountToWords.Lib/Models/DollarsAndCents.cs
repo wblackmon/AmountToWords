@@ -4,47 +4,37 @@ namespace AmountToWords.Lib.Models;
 
 public class DollarsAndCents
 {
-    // Truncate whole dollar portion of the amount
     public long Dollars { get; }
-
-    // Extract cent portion from the fractional remainder
     public int Cents { get; }
-
-    // Format cents as a fraction (e.g. "45/100")
+    public bool IsNegative { get; }
     public string Fraction => $"{Cents:D2}/100";
-
-    // Cached groupings of digits (used for magnitude translation)
     private List<int>? _threeDigitGroups;
-
-    // Injected converter responsible for numeric-to-words translation
     private readonly IAmountToWordsConverter _converter;
 
-    // Constructor splits the incoming amount into dollars and cents
     public DollarsAndCents(decimal amount, IAmountToWordsConverter converter)
     {
         _converter = converter;
-        Dollars = (long)Math.Floor(amount);
-        Cents = (int)((amount - Dollars) * 100);
-    }
 
-    // Lazily compute digit groups once for reuse across translation calls
-    public List<int> GetGroups()
-    {
-        if (_threeDigitGroups == null)
-            _threeDigitGroups = _converter.GetThreeDigitGroups(Dollars);
+        // Round early and uniformly
+        var rounded = Math.Round(amount, 2, MidpointRounding.AwayFromZero);
+        IsNegative = rounded < 0;
 
-        return _threeDigitGroups;
+        var absolute = Math.Abs(rounded);
+        Dollars = (long)absolute;
+        Cents = (int)((absolute - Dollars) * 100);
     }
 
     // Final word rendering of the amount including fractional formatting
     public override string ToString()
     {
-        var words = _converter.GetMagnitudeWords(GetGroups());
+        if (_threeDigitGroups == null)
+            _threeDigitGroups = _converter.GetThreeDigitGroups(Dollars);
 
-        // Fall backwqws to "zero" if no words were generated
+        var words = _converter.GetMagnitudeWords(_threeDigitGroups);
+
         var core = string.IsNullOrWhiteSpace(words) ? "zero" : words;
+        if (IsNegative) core = "negative " + core;
 
-        // Return full output with initial cap and fractional cents
         return CapitalizeFirst($"{core} and {Fraction} dollars");
     }
 
